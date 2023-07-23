@@ -4,7 +4,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
     let maxlength = Math.max(...code.map(x => x.length));
     code = code.map(x => x.padEnd(maxlength, ' ').split``);
 
-    inputs = inputs.flatMap(x => typeof x == 'string' ? x.split``.map(x => x.charCodeAt()) : x);
+    inputs = inputs.flatMap(x => typeof x == 'string' ? x.split``.map(x => x.charCodeAt()).concat(0) : x) || [0];
 
     class Ip {
         constructor (x, y) {
@@ -112,13 +112,13 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                     } else if (char == '~') {
                         pop();
                     } else if (char == 's') {
-                        if (pop()) skip = true;
+                        if (pop()[0]) skip = true;
                     } else if (char == 'j') {
                         let [X, Y] = pop(2);
                         ip.x = X;
                         ip.y = Y;
                     } else if (char == 'p') {
-                        let [X, Y, char] = pop(2);
+                        let [X, Y, char] = pop(3);
                         try {
                         code[Y][X] = String.fromCharCode(char);
                         } catch (e) {}
@@ -136,7 +136,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                         push(a + b);
                     } else if (char == '-') {
                         let [a, b] = pop(2);
-                        push(b - 1);
+                        push(b - a);
                     } else if (char == '*') {
                         let [a, b] = pop(2);
                         push(a * b);
