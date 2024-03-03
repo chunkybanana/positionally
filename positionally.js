@@ -13,6 +13,8 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
             this.stack = [];
             this.dir = 0;
             this.inputs = [...inputs];
+            this.skip = false;
+            this.stringmode = false;
             // WHYYYY
             this.pop = this.pop.bind(this);
         }
@@ -58,11 +60,11 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
         ips.push(new Ip(0, 0));
     }
 
-    let stringmode = false, skip = false, global_stack = [];
+    global_stack = [];
 
     while (ips.length > 0) {
         for (let i = 0; i < ips.length; i++) {
-            let ip = ips[i], {x, y, stack, pop, inputs} = ip, push = ip.stack.push.bind(ip.stack);
+            let ip = ips[i], {x, y, pop, inputs, skip, stringmode} = ip, push = ip.stack.push.bind(ip.stack);
             if (code[y][x] !== ' ') {
                 let char = normalise(x, y)
                 if (stringmode) {
