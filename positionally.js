@@ -49,8 +49,8 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
 
     for (let row = 0; row < code.length; row++) {
         for (let col = 0; col < code[row].length; col++) {
-            if (normalise(row, col) == '@' && code[row][col] !== ' ') {
-                ips.push(new Ip(row, col));
+            if (normalise(col, row) == '@' && code[row][col] !== ' ') {
+                ips.push(new Ip(col, row));
             }
         }
     }
