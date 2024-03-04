@@ -64,17 +64,17 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
 
     while (ips.length > 0) {
         for (let i = 0; i < ips.length; i++) {
-            let ip = ips[i], {x, y, pop, inputs, skip, stringmode} = ip, push = ip.stack.push.bind(ip.stack);
+            let ip = ips[i], {x, y, pop, inputs} = ip, push = ip.stack.push.bind(ip.stack);
             if (code[y][x] !== ' ') {
                 let char = normalise(x, y)
-                if (stringmode) {
+                if (ip.stringmode) {
                     if (char == '"') {
-                        stringmode = false;
+                        ip.stringmode = false;
                     } else {
                         push(code[y][x].charCodeAt());
                     }
-                } else if (skip) {
-                    skip = false;
+                } else if (ip.skip) {
+                    ip.skip = false;
                 } else {
                     if (char == '\\') {
                         ip.dir ^= 1;
@@ -98,7 +98,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                         ips.splice(i, 1);
                         i--;
                     } else if (char == '"') {
-                        stringmode = true;
+                        ip.stringmode = true;
                     } else if (char == '$') {
                         let [a, b] = pop(2);
                         push(a, b);
@@ -114,7 +114,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                     } else if (char == '~') {
                         pop();
                     } else if (char == 's') {
-                        if (pop()[0]) skip = true;
+                        if (pop()[0]) ip.skip = true;
                     } else if (char == 'j') {
                         let [X, Y] = pop(2);
                         ip.x = X;
@@ -128,7 +128,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                         let [X, Y] = pop(2);
                         push(code[Y]?.[X]?.charCodeAt() ?? 0);
                     } else if (char == 'S') {
-                        skip = true;
+                        ip.skip = true;
                     } else if (char == '|') {
                         global_stack.push(pop())
                     } else if (char == '&') {
