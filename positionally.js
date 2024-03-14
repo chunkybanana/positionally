@@ -133,7 +133,7 @@ let positionally = (code, inputs = [], flags = '', output = x => process.stdout.
                     } else if (char == '|') {
                         global_stack.push(pop()[0])
                     } else if (char == '&') {
-                        push(global_stack.pop())
+                        push(global_stack.pop() ?? 0)
                     } else if (char == '+') {
                         let [a, b] = pop(2);
                         push(a + b);
