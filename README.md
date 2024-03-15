@@ -35,7 +35,7 @@ This grid repeats forever, so the IP's x/y are taken modulo 8 to get the command
 `;` - Terminate IP.  
 `=` - Test equality.    
 `s` - Skip next op if nonzero.  
-`j` - Pop two numbers and jump.  
+`j` - Pop two numbers x,y and jump to x,y (note: IP moves after jump)
 `p` - Pop two numbers and an ord and put char.  
 `g` - Pop two numbers and get char at point.  
 `S` - Unconditionally skip next instruction.  
